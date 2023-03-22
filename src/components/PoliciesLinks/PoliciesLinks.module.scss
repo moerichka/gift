@@ -1,0 +1,23 @@
+@import "~/src/styles/functions";
+
+.policiesLinks {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.link {
+  color: white;
+  text-decoration-line: underline;
+  font-size: 12px;
+  transition: 0.3s;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration-line: underline;
+    transform: translateY(rem(-2px));
+  }
+}
