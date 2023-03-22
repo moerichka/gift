@@ -1,4 +1,5 @@
 import React from "react";
+import { SnackbarProvider } from "notistack";
 import {
   EthereumClient,
   w3mConnectors,
@@ -9,6 +10,7 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { polygon, polygonMumbai } from "wagmi/chains";
 
 import MainPage from "pages/MainPage";
+import SnackBar from "components/SnackBar";
 
 import "styles/main.scss";
 
@@ -22,18 +24,35 @@ const { provider } = configureChains(chains, [
 
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors: w3mConnectors({ projectId: PROJECT_ID, version: 1, chains }),
+  connectors: w3mConnectors({ projectId: PROJECT_ID, version: 2, chains }),
   provider,
 });
 
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
+declare module "notistack" {
+  interface VariantOverrides {
+    trace: {
+      customTitle?: React.ReactNode;
+      customMessage?: React.ReactNode;
+      type?: "error" | "default" | "correct";
+    };
+  }
+}
+
 function App() {
   return (
     <>
-      <WagmiConfig client={wagmiClient}>
-        <MainPage />
-      </WagmiConfig>
+      <SnackbarProvider
+        Components={{
+          trace: SnackBar,
+        }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <WagmiConfig client={wagmiClient}>
+          <MainPage />
+        </WagmiConfig>
+      </SnackbarProvider>
 
       <Web3Modal projectId={PROJECT_ID} ethereumClient={ethereumClient} />
     </>

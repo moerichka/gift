@@ -21,9 +21,10 @@ function ModalContainer({ children, open, isClosing, onClose }: Props) {
       <button
         type="button"
         onClick={onClose}
-        className={s.background}
+        className={s.buttonBackground}
         disabled={isClosing}
       />
+      <div className={s.background} />
     </div>
   );
 }
