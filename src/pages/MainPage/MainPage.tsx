@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   useAccount,
   useContract,
@@ -7,12 +7,14 @@ import {
   useSwitchNetwork,
 } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
+import { enqueueSnackbar } from "notistack";
 
 import background from "images/background.jpg";
 
 import PoliciesLinks from "components/PoliciesLinks";
 import ConnectWalletModal from "components/Modal/ConnectWalletModal";
 import EmailRequestModal from "components/Modal/EmailRequestModal";
+import NoNftModal from "components/Modal/NoNftModal";
 
 import salesAbi from "assets/sales-abi.json";
 import nftAbi from "assets/nft-abi.json";
@@ -25,16 +27,19 @@ const NFT_CONTRACT_ADDRESS = "0x25bf876880A40b77F51F878470C9Ca1c67F7fd4a";
 const CURRENT_CHAIN_ID = polygonMumbai.id; // TODO: изменить на polygon.id при релизе на продакшн
 
 function MainPage() {
+  const [isInitial, setIsInitial] = useState(true);
   const { data: signer } = useSigner();
   const { address } = useAccount();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
+  const [isGiftGot, setIsGiftGot] = useState(false);
 
-  const [count, setCount] = useState<"0" | "1" | "2">();
+  const [count, setCount] = useState<"0" | "1" | "2" | undefined>(undefined);
   const [emailRequestModalOpen, setEmailRequestModalOpen] = useState(false);
   const [walletConnectModalOpen, setWalletConnectModalOpen] = useState(
     !address,
   );
+  const [noNftModalOpen, setNoNftModalOpen] = useState(false);
 
   useEffect(() => {
     setWalletConnectModalOpen(!address);
@@ -70,7 +75,12 @@ function MainPage() {
           setCount(nftCount);
         }
       } catch (error: any) {
-        console.log(error);
+        enqueueSnackbar({
+          variant: "trace",
+          customTitle: "Error",
+          customMessage: error?.message,
+          type: "error",
+        });
       }
     };
 
@@ -79,24 +89,61 @@ function MainPage() {
 
   const openEmailModal = () => {
     setEmailRequestModalOpen(true);
+    setIsGiftGot(true);
   };
   const closeEmailModal = () => {
     setEmailRequestModalOpen(false);
   };
 
+  useEffect(() => {
+    if (isInitial) {
+      setIsInitial(false);
+      return;
+    }
+    if (address) {
+      enqueueSnackbar({
+        variant: "trace",
+        customTitle: "Congratulations!",
+        customMessage: "Wallet has been connected",
+        type: "correct",
+      });
+    }
+  }, [address]);
+
+  useEffect(() => {
+    // if (isInitial) {
+    //   setIsInitial(false);
+    //   return;
+    // }
+    if (count === "0") {
+      setNoNftModalOpen(true);
+    }
+    if (count === "1" || count === "2") {
+      setNoNftModalOpen(false);
+    }
+  }, [count, address]);
+
+  useEffect(() => {
+    if (count && !address) {
+      setCount(undefined);
+    }
+  }, [count, address]);
+
+  const isButtonShown = useMemo(
+    () => !isGiftGot && (count === "1" || count === "2"),
+    [count, isGiftGot],
+  );
+
   return (
     <>
       <div className={s.mainPage}>
-        <div className={s.buttonWrapper}>
-          <button
-            className={s.button}
-            type="button"
-            disabled={count === "0"}
-            onClick={openEmailModal}
-          >
-            Get reward
-          </button>
-        </div>
+        {isButtonShown && (
+          <div className={s.buttonWrapper}>
+            <button className={s.button} type="button" onClick={openEmailModal}>
+              Get reward
+            </button>
+          </div>
+        )}
         <div className={s.backgroundWrapper}>
           <img src={background} alt="" className="fill" />
         </div>
@@ -106,6 +153,7 @@ function MainPage() {
       </div>
       <ConnectWalletModal open={walletConnectModalOpen} />
       <EmailRequestModal open={emailRequestModalOpen} close={closeEmailModal} />
+      <NoNftModal open={noNftModalOpen} />
     </>
   );
 }

@@ -7,14 +7,14 @@ import metamaskImg from "images/metamask.svg";
 
 import ModalContainer from "../ModalContainer";
 
-import s from "./ConnectWalletModal.module.scss";
+import s from "./NoNftModal.module.scss";
 
 interface Props {
   open: boolean;
   close?: () => void;
 }
 
-function ConnectWalletModal({ open, close = undefined }: Props) {
+function NoNftModal({ open, close = undefined }: Props) {
   const { isClosing, onClose } = useCloseModal(close);
   const [userInfo, setUserInfo] = useState("");
 
@@ -44,25 +44,22 @@ function ConnectWalletModal({ open, close = undefined }: Props) {
         <div className={s.modalWindow}>
           <div className={s.summeryWrapper}>
             <div className={s.summery}>
-              <div className={s.title}>Connect your wallet!</div>
+              <div className={s.title}>No NFT Pass yet</div>
             </div>
           </div>
           <div className={s.content}>
             <div className={s.textBlock}>
               <p>
-                Hello, tracer! So great to see you here! To receive the gift,
-                please connect your MetaMask wallet so we can verify your NFT
-                Pass.
+                Oops, there is no NFT Pass in your wallet. Please get an NFT
+                Pass on OpenSea to receive your gift.
               </p>
             </div>
-            <button
-              type="button"
+            <a
+              href="https://opensea.io/collection/trace-genesis-nft-pass"
               className={s.button}
-              onClick={() => openWalletConnect()}
             >
-              <img src={metamaskImg} alt="" className={s.icon} />
-              Connect Wallet
-            </button>
+              OpenSea
+            </a>
           </div>
         </div>
       </div>
@@ -70,4 +67,4 @@ function ConnectWalletModal({ open, close = undefined }: Props) {
   );
 }
 
-export default ConnectWalletModal;
+export default NoNftModal;

@@ -18,14 +18,14 @@ $mobile: 420px;
 
 .modalWindow {
   width: 100%;
-  background-color: hsla(220, 23%, 97%, 0.95);
+  background-color: hsla(220, 23%, 97%, 1);
   border-radius: 30px;
   overflow: hidden;
   user-select: none;
 
   @media (max-width: $mobile) {
     border-radius: 30px 30px 0 0;
-    // background-color: white;
+    background-color: white;
   }
 
   .summeryWrapper {
@@ -58,10 +58,9 @@ $mobile: 420px;
     //  min-height: 75px;
     //}
     @media (max-width: $mobile) {
-      background-color: transparent;
+      background-color: white;
       color: var(--main-color);
       box-shadow: none;
-      min-height: 58px;
     }
 
     .close {
@@ -113,10 +112,10 @@ $mobile: 420px;
   }
 
   .content {
-    padding: 41px 44px 50px 47px;
+    padding: 44px 44px 70px 47px;
 
     @media (max-width: $mobile) {
-      padding: 15px 38px 48px;
+      padding: 35px 38px 48px;
     }
 
     .title {
@@ -139,7 +138,6 @@ $mobile: 420px;
       font-weight: 600;
       font-size: 18px;
       line-height: 23px;
-      max-width: 90%;
 
       @media (max-width: $mobile) {
         font-size: 12px;
@@ -188,70 +186,51 @@ $mobile: 420px;
       //  padding: 20px 15px 20px;
       //}
     }
+
+    .submit {
+      position: absolute;
+      right: 18px;
+      bottom: 16px;
+      padding: 0 30px;
+      font-size: 13px;
+
+      @media (max-width: $tablet) {
+        position: relative;
+        right: initial;
+        bottom: initial;
+        font-size: 11px;
+        padding: 0 25px;
+        margin-top: 20px;
+        margin-left: auto;
+      }
+    }
   }
 }
 
-.emailInput {
-  margin-top: 40px;
-  height: 60px;
-  width: 100%;
-  background-color: white;
-  border-radius: 25px;
-  position: relative;
+.button {
+  // margin-top: 47px;
+  margin-top: 27px;
+  background-color: hsla(33, 100%, 54%, 1);
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  border-radius: 20px;
+  padding: 0 27px;
+  height: 60px;
+  gap: 10px;
+  transition: 0.3s;
+  width: max-content;
 
-  @media (max-width: $mobile) {
-    border-radius: 20px;
-    height: 50px;
-  }
+  color: white;
+  text-transform: uppercase;
+  font-family: HeadingNow;
+  font-size: 25px;
+  line-height: 125%;
 
-  .input {
-    font-weight: 600;
-    font-size: 16px;
-    color: hsla(220, 18%, 51%, 1);
-    padding: 0 27px;
-    flex-grow: 1;
-    width: 100%;
-    max-width: 100%;
-
-    &::placeholder {
-      color: hsla(220, 18%, 51%, 1);
-    }
-
-    @media (max-width: $mobile) {
-      font-size: 15px;
-    }
-  }
-
-  .submit {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: HeadingNow;
-    font-size: 25px;
-    color: white;
-    text-transform: uppercase;
-    border-radius: 25px;
-    width: 120px;
-    min-width: 120px;
-    height: 100%;
-    background-color: var(--main-color);
-    transition: 0.3s;
-
-    @media (max-width: $mobile) {
-      width: 80px;
-      min-width: 80px;
-      border-radius: 20px;
-      font-size: 23px;
-    }
-
-    @include desktop() {
-      &:hover {
-        transform: translateX(-2px);
-      }
+  @include desktop() {
+    &:hover {
+      transform: translateY(-2px);
     }
   }
 }
