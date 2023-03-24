@@ -10,6 +10,7 @@ import { polygonMumbai } from "wagmi/chains";
 import { enqueueSnackbar } from "notistack";
 
 import background from "images/background.jpg";
+import backgroundMobile from "images/backgroundMobile.jpg";
 
 import PoliciesLinks from "components/PoliciesLinks";
 import ConnectWalletModal from "components/Modal/ConnectWalletModal";
@@ -20,6 +21,8 @@ import salesAbi from "assets/sales-abi.json";
 import nftAbi from "assets/nft-abi.json";
 
 import s from "./MainPage.module.scss";
+
+const REACT_APP_API_ENDPOINT = "https://trace-core.flamma.app";
 
 const SALES_CONTRACT_ADDRESS = "0x7ba75866bF445b476b1004D0e41BD1749E0cb1CF";
 const NFT_CONTRACT_ADDRESS = "0x25bf876880A40b77F51F878470C9Ca1c67F7fd4a";
@@ -87,9 +90,41 @@ function MainPage() {
     initialize();
   }, [isInitializing]);
 
-  const openEmailModal = () => {
-    setEmailRequestModalOpen(true);
-    setIsGiftGot(true);
+  const onGetGift = async () => {
+    try {
+      const response = await fetch(`${REACT_APP_API_ENDPOINT}/gifts/get`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          wallet_address: address,
+        }),
+      });
+
+      if (response.status === 400) {
+        throw new Error("Hmm, there is no you're wallet address...");
+      }
+      if (response.status === 404) {
+        throw new Error("You are not registered on Gem platform");
+      }
+      if (response.status === 405) {
+        setIsGiftGot(true);
+        throw new Error("You've already got your gift!");
+      }
+      if (response.ok) {
+        setEmailRequestModalOpen(true);
+        setIsGiftGot(true);
+        return;
+      }
+    } catch (error: any) {
+      enqueueSnackbar({
+        variant: "trace",
+        customTitle: "Error",
+        customMessage: error?.message,
+        type: "error",
+      });
+    }
   };
   const closeEmailModal = () => {
     setEmailRequestModalOpen(false);
@@ -139,13 +174,22 @@ function MainPage() {
       <div className={s.mainPage}>
         {isButtonShown && (
           <div className={s.buttonWrapper}>
-            <button className={s.button} type="button" onClick={openEmailModal}>
+            <button className={s.button} type="button" onClick={onGetGift}>
               Get reward
             </button>
           </div>
         )}
         <div className={s.backgroundWrapper}>
-          <img src={background} alt="" className="fill" />
+          <img
+            src={background}
+            alt=""
+            className={`fill ${s.backgroundDesktop}`}
+          />
+          <img
+            src={backgroundMobile}
+            alt=""
+            className={`fill ${s.backgroundMobile}`}
+          />
         </div>
         <div className={s.footer}>
           <PoliciesLinks />

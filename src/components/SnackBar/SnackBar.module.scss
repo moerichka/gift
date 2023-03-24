@@ -64,7 +64,7 @@
     gap: rem(5px);
 
     @media (max-width: rem(480px)) {
-      font-size: rem(11px);
+      font-size: rem(15px);
     }
   }
 
@@ -94,6 +94,11 @@
   position: relative;
   width: 20px;
   height: 20px;
+
+  @media (max-width: rem(480px)) {
+    width: 15px;
+    height: 15px;
+  }
 
   .line {
     position: absolute;

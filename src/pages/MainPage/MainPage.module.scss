@@ -1,6 +1,6 @@
 @import "~/src/styles/mixins";
 
-.mainPage{
+.mainPage {
   width: 100%;
   height: var(--height, 100vh);
 }
@@ -11,6 +11,14 @@
   transform: translateY(-50%);
   right: 23%;
   z-index: 2;
+
+  @media (max-width: 800px) {
+    top: initial;
+    right: initial;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 100px;
+  }
 
   .button {
     min-width: 340px;
@@ -26,6 +34,13 @@
     font-size: 52px;
     color: white;
     text-transform: uppercase;
+
+    @media (max-width: 800px) {
+      min-width: 220px;
+      height: 60px;
+      font-size: 32px;
+      border-radius: 20px;
+    }
 
     @include desktop() {
       &:hover {
@@ -43,8 +58,18 @@
   width: 100%;
   z-index: 1;
 
-  &>img{
+  .backgroundDesktop {
     object-position: 85% 50%;
+    @media (max-width: 800px) {
+      display: none;
+    }
+  }
+  .backgroundMobile {
+    object-position: 85% 25%;
+    display: none;
+    @media (max-width: 800px) {
+      display: block;
+    }
   }
 }
 
