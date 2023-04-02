@@ -13,6 +13,7 @@ import MainPage from "pages/MainPage";
 import SnackBar from "components/SnackBar";
 
 import "styles/main.scss";
+import HeightSetter from "components/helpers/HeightSetter";
 
 const PROJECT_ID = "61543626b25c5e5c7ee6418df567364f";
 
@@ -54,7 +55,16 @@ function App() {
         </WagmiConfig>
       </SnackbarProvider>
 
-      <Web3Modal projectId={PROJECT_ID} ethereumClient={ethereumClient} />
+      <HeightSetter />
+      <Web3Modal
+        projectId={PROJECT_ID}
+        ethereumClient={ethereumClient}
+        themeVariables={{
+          "--w3m-z-index": "2500",
+          "--w3m-background-color": "hsla(32, 100%, 62%, 1)",
+          "--w3m-accent-color": "hsla(32, 100%, 62%, 1)",
+        }}
+      />
     </>
   );
 }

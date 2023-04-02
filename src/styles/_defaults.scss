@@ -52,6 +52,7 @@ body {
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  overflow: hidden;
 
   ::-webkit-scrollbar {
     width: 0;
